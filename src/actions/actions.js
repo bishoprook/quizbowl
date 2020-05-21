@@ -19,6 +19,10 @@ export const needsRoomPermission = new Set([
     actionTypes.SET_SCORE
 ]);
 
+export const validWithoutExistingRoom = new Set([
+    actionTypes.CREATE
+]);
+
 export function create(room, passcode) {
     return { type: actionTypes.CREATE, room, passcode };
 };

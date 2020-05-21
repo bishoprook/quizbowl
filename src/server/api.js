@@ -7,9 +7,13 @@ import ws from 'ws';
 import mapValues from '../util/mapValues.js';
 import filterValues from '../util/filterValues.js';
 
-import { needsRoomPermission } from '../actions/actions.js';
+import checkRoomId from './middleware/checkRoomId.js';
+import checkPasscode from './middleware/checkPasscode.js';
 
-const store = redux.createStore(lobbyReducer);
+import { needsRoomPermission } from '../actions/actions.js';
+import ApiError from './errors/ApiError.js';
+
+const store = redux.createStore(lobbyReducer, {}, redux.applyMiddleware(checkRoomId, checkPasscode));
 
 // RESTful API
 const api = express();
@@ -18,32 +22,29 @@ api.use(express.json());
 const redact = room => filterValues(room, (v, key) => !['passcode'].includes(key));
 
 api.post('/api/action', (req, res) => {
-    const { type, passcode, room: roomId } = req.body;
-    if (roomId == null) {
-        res.status(400).send({ error: 'Must provide room ID' });
-        return;
-    }
-    const room = store.getState()[roomId];
-    if (needsRoomPermission.has(type) && (passcode == null || room.passcode !== passcode)) {
-        res.status(403).send({ error: `Passcode incorrect for room ${roomId}`});
-        return;
-    }
-
+    const { room: roomId } = req.body;
     store.dispatch(req.body);
     res.send(redact(store.getState()[roomId]));
 });
 api.get('/api/state/:room', (req, res) => {
     const { room: roomId } = req.params;
     if (roomId == null) {
-        res.status(400).send({ error: 'Must provide room ID' });
-        return;
+        throw new ApiError(400, 'Must provide room ID');
     }
     const room = store.getState()[roomId];
     if (room == null) {
-        res.status(404).send({ error: `No such room ${roomId}` });
-        return;
+        throw new ApiError(404, `No such room ${roomId}`);
     }
     res.send(redact(room));
+});
+api.use((err, req, res, next) => {
+    if (err instanceof ApiError) {
+        console.error(err.stack);
+        res.status(err.statusCode).send(err.body);
+    }
+    else {
+        next(err);
+    }
 });
 api.listen(8080);
 
