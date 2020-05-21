@@ -1,5 +1,6 @@
 import { actionTypes } from '../../actions/actions.js';
 import roomReducer from './roomReducer.js';
+import mapValues from '../../util/mapValues.js';
 
 const lobbyReducer = (state = {}, action) => {
     const { room: roomId } = action;
@@ -7,9 +8,7 @@ const lobbyReducer = (state = {}, action) => {
         case actionTypes.CREATE:
             return Object.assign({}, { [roomId]: roomReducer({ id: roomId }, action) }, state);
         default:
-            return state.hasOwnProperty(roomId) ?
-                Object.assign({}, state, { [roomId]: roomReducer(state[roomId], action) }) :
-                state;
+            return mapValues(state, room => roomReducer(room, action));
     }
 }
 

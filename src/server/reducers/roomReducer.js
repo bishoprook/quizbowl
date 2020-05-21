@@ -4,7 +4,7 @@ import scoresReducer from './scoresReducer.js';
 import questionsReducer from './questionsReducer.js';
 import showingReducer from './showingReducer.js';
 
-const roomReducer = (state, action) => ({
+const roomReducer = (state, action) => state.id !== action.room ? state : ({
     id: state.id,
     players: playersReducer(state.players, action),
     buzzed: buzzedReducer(state.buzzed, action, state.players),
