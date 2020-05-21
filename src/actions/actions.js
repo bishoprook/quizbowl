@@ -10,38 +10,38 @@ export const actionTypes = {
     SET_SCORE: 'setScore'
 };
 
-export function create(passcode, players) {
-    return { type: actionTypes.CREATE, passcode, players };
+export function create(room) {
+    return { type: actionTypes.CREATE, room };
 };
 
-export function addQuestion(text, index = undefined) {
-    return { type: actionTypes.ADD_QUESTION, text, index };
+export function addQuestion(room, text, index = undefined) {
+    return { type: actionTypes.ADD_QUESTION, room, text, index };
 };
 
-export function showQuestion(index) {
-    return { type: actionTypes.SHOW_QUESTION, index };
+export function showQuestion(room, index) {
+    return { type: actionTypes.SHOW_QUESTION, room, index };
 };
 
-export function addPlayer(name) {
-    return { type: actionTypes.ADD_PLAYER, name };
+export function addPlayer(room, name) {
+    return { type: actionTypes.ADD_PLAYER, room, name };
 };
 
-export function buzz(name) {
-    return { type: actionTypes.BUZZ, name };
+export function buzz(room, name) {
+    return { type: actionTypes.BUZZ, room, name };
 };
 
-export function clearBuzzer() {
-    return { type: actionTypes.CLEAR_BUZZER };
+export function clearBuzzer(room) {
+    return { type: actionTypes.CLEAR_BUZZER, room };
 };
 
-export function addPoints(name, amount = 1) {
-    return { type: actionTypes.ADD_POINTS, name, amount };
+export function addPoints(room, name, amount = 1) {
+    return { type: actionTypes.ADD_POINTS, room, name, amount };
 };
 
-export function removePoints(name, amount = 1) {
-    return { type: actionTypes.REMOVE_POINTS, name, amount };
+export function removePoints(room, name, amount = 1) {
+    return { type: actionTypes.REMOVE_POINTS, room, name, amount };
 };
 
-export function setScore(name, score) {
-    return { type: actionTypes.SET_SCORE, name, score };
+export function setScore(room, name, score) {
+    return { type: actionTypes.SET_SCORE, room, name, score };
 };

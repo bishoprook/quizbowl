@@ -8,13 +8,13 @@ const questions = [
 ];
 
 test('sets showing based on input', () => {
-    expect(reducer(null, showQuestion(1), questions)).toStrictEqual(1);
+    expect(reducer(null, showQuestion(null, 1), questions)).toStrictEqual(1);
 });
 
 test('does not set showing above bounds', () => {
-    expect(reducer(2, showQuestion(5), questions)).toStrictEqual(2);
+    expect(reducer(2, showQuestion(null, 5), questions)).toStrictEqual(2);
 });
 
 test('does not set showing below bounds', () => {
-    expect(reducer(2, showQuestion(-1), questions)).toStrictEqual(2);
+    expect(reducer(2, showQuestion(null, -1), questions)).toStrictEqual(2);
 });

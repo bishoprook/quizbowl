@@ -3,7 +3,7 @@ import { addQuestion } from '../../actions/actions.js';
 
 test('adds to an initial empty state', () => {
     const state = [];
-    const action = addQuestion('questionText');
+    const action = addQuestion(null, 'questionText');
     const expected = [{ text: 'questionText' }];
 
     expect(reducer(state, action)).toStrictEqual(expected);
@@ -11,7 +11,7 @@ test('adds to an initial empty state', () => {
 
 test('adds to the end if no index given', () => {
     const state = [{ text: 'question1' }];
-    const action = addQuestion('question2');
+    const action = addQuestion(null, 'question2');
     const expected = [{ text: 'question1' }, { text: 'question2' }];
 
     expect(reducer(state, action)).toStrictEqual(expected);
@@ -19,7 +19,7 @@ test('adds to the end if no index given', () => {
 
 test('inserts in middle if index given', () => {
     const state = [{ text: 'question1' }, { text: 'question2' }];
-    const action = addQuestion('question1.5', 1);
+    const action = addQuestion(null, 'question1.5', 1);
     const expected = [{ text: 'question1' }, { text: 'question1.5' }, { text: 'question2' }];
 
     expect(reducer(state, action)).toStrictEqual(expected);
@@ -27,7 +27,7 @@ test('inserts in middle if index given', () => {
 
 test('inserts at end if index below zero', () => {
     const state = [{ text: 'question1' }];
-    const action = addQuestion('questionNeg1', -1);
+    const action = addQuestion(null, 'questionNeg1', -1);
     const expected = [{ text: 'question1' }, { text: 'questionNeg1' }];
 
     expect(reducer(state, action)).toStrictEqual(expected);

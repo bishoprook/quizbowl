@@ -1,41 +1,43 @@
 import { createStore } from 'redux';
-import roomReducer from './reducers/roomReducer.js';
+import lobbyReducer from './reducers/lobbyReducer.js';
 
-import { addQuestion, showQuestion, addPlayer, buzz, addPoints } from '../actions/actions.js';
+import * as actions from '../actions/actions.js';
 
 test('starts with empty state', () => {
-    const store = createStore(roomReducer);
-    expect(store.getState()).toStrictEqual({ players: [], buzzed: null, scores: {}, questions: [], showing: null });
+    const store = createStore(lobbyReducer);
+    expect(store.getState()).toStrictEqual({});
 });
 
 test('action sequence', () => {
-    const store = createStore(roomReducer);
+    const store = createStore(lobbyReducer);
 
-    const actions = [
-        addQuestion('what rolls down stairs'),
-        showQuestion(1),
-        addQuestion('rolls over your neighbors dog'),
-        addPlayer('katie'),
-        addQuestion('alone or in pairs', 1),
-        showQuestion(2),
-        addPlayer('dan'),
-        buzz('katie'),
-        buzz('dan'),
-        addPoints('dan', 3)
-    ];
-
-    actions.forEach(a => store.dispatch(a));
+    [
+        actions.create('BOBA'),
+        actions.addQuestion('BOBA', 'what rolls down stairs'),
+        actions.showQuestion('BOBA', 1),
+        actions.addQuestion('BOBA', 'rolls over your neighbors dog'),
+        actions.addPlayer('BOBA', 'katie'),
+        actions.addQuestion('BOBA', 'alone or in pairs', 1),
+        actions.showQuestion('BOBA', 2),
+        actions.addPlayer('BOBA', 'dan'),
+        actions.buzz('BOBA', 'katie'),
+        actions.buzz('BOBA', 'dan'),
+        actions.addPoints('BOBA', 'dan', 3)
+    ].forEach(a => store.dispatch(a));
 
     const expected = {
-        players: ['katie', 'dan'],
-        buzzed: 'katie',
-        scores: { katie: 0, dan: 3 },
-        questions: [
-            { text: 'what rolls down stairs' },
-            { text: 'alone or in pairs' },
-            { text: 'rolls over your neighbors dog' }
-        ],
-        showing: 2
+        BOBA: {
+            id: 'BOBA',
+            players: ['katie', 'dan'],
+            buzzed: 'katie',
+            scores: { katie: 0, dan: 3 },
+            questions: [
+                { text: 'what rolls down stairs' },
+                { text: 'alone or in pairs' },
+                { text: 'rolls over your neighbors dog' }
+            ],
+            showing: 2
+        }
     };
 
     expect(store.getState()).toStrictEqual(expected);

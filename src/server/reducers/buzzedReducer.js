@@ -1,6 +1,6 @@
 import { actionTypes } from '../../actions/actions.js';
 
-const buzzedReducer = (state = null, action, players) => {
+const buzzedReducer = (state = null, action, players = []) => {
     switch (action.type) {
         case actionTypes.BUZZ:
             const { name } = action;
