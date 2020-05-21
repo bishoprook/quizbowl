@@ -1,16 +1,23 @@
-import { actionTypes } from '../../actions/actions.js';
-import showQuestionReducer from './showQuestionReducer.js';
-import addQuestionReducer from './addQuestionReducer.js';
+import playersReducer from './playersReducer.js';
+import buzzedReducer from './buzzedReducer.js';
+import scoresReducer from './scoresReducer.js';
+import questionsReducer from './questionsReducer.js';
+import showingReducer from './showingReducer.js';
 
-const roomReducer = context => (previousState, action) => {
-    switch (action.type) {
-        case actionTypes.ADD_QUESTION:
-            return addQuestionReducer(context)(previousState, action);
-        case actionTypes.SHOW_QUESTION:
-            return showQuestionReducer(context)(previousState, action);
-        default:
-            return previousState;
-    }
+const emptyRoom = {
+    players: [],
+    buzzed: null,
+    scores: {},
+    questions: [],
+    showing: null
 };
+
+const roomReducer = (state = emptyRoom, action) => ({
+    players: playersReducer(state.players, action),
+    buzzed: buzzedReducer(state.buzzed, action, state.players),
+    scores: scoresReducer(state.scores, action),
+    questions: questionsReducer(state.questions, action),
+    showing: showingReducer(state.showing, action, state.questions)
+});
 
 export default roomReducer;
