@@ -10,7 +10,6 @@ import filterValues from '../util/filterValues.js';
 import checkRoomId from './middleware/checkRoomId.js';
 import checkPasscode from './middleware/checkPasscode.js';
 
-import { needsRoomPermission } from '../actions/actions.js';
 import ApiError from './errors/ApiError.js';
 
 const store = redux.createStore(lobbyReducer, {}, redux.applyMiddleware(checkRoomId, checkPasscode));
@@ -28,9 +27,6 @@ api.post('/api/action', (req, res) => {
 });
 api.get('/api/state/:room', (req, res) => {
     const { room: roomId } = req.params;
-    if (roomId == null) {
-        throw new ApiError(400, 'Must provide room ID');
-    }
     const room = store.getState()[roomId];
     if (room == null) {
         throw new ApiError(404, `No such room ${roomId}`);
@@ -63,7 +59,7 @@ let prevState = {};
 store.subscribe(() => {
     const state = store.getState();
     const changed = filterValues(state, (newState, key) => prevState[key] !== newState);
-    const updates = mapValues(changed, s => JSON.stringify(s));
+    const updates = mapValues(changed, s => JSON.stringify(redact(s)));
     prevState = state;
     wss.clients.forEach(socket => {
         if (updates.hasOwnProperty(socket.room)) {
