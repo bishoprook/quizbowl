@@ -1,13 +1,15 @@
-import storeBuilder from './storeBuilder.js';
+import { createStore } from 'redux';
+import roomReducer from './reducers/roomReducer.js';
+
 import { addQuestion, showQuestion, addPlayer, buzz, addPoints } from '../actions/actions.js';
 
 test('starts with empty state', () => {
-    const store = storeBuilder();
+    const store = createStore(roomReducer);
     expect(store.getState()).toStrictEqual({ players: [], buzzed: null, scores: {}, questions: [], showing: null });
 });
 
 test('action sequence', () => {
-    const store = storeBuilder();
+    const store = createStore(roomReducer);
 
     const actions = [
         addQuestion('what rolls down stairs'),

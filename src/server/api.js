@@ -1,8 +1,8 @@
-import randomId from '../util/randomId.js';
-import storeBuilder from './storeBuilder.js';
 import restful from './restful.js';
+import roomReducer from './reducers/roomReducer.js';
 
-const context = { idGenerator: randomId };
-const store = storeBuilder(context);
+import redux from 'redux';
+
+const store = redux.createStore(roomReducer);
 
 restful(store);
