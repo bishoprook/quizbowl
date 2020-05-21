@@ -4,19 +4,50 @@ import redux from 'redux';
 import lobbyReducer from './reducers/lobbyReducer.js';
 import ws from 'ws';
 
+import mapValues from '../util/mapValues.js';
+import filterValues from '../util/filterValues.js';
+
+import { needsRoomPermission } from '../actions/actions.js';
+
 const store = redux.createStore(lobbyReducer);
 
 // RESTful API
 const api = express();
 api.use(express.json());
 
-api.post('/api', (req, res) => {
-    console.log('Got request: ', req.body);
+const redact = room => filterValues(room, (v, key) => !['passcode'].includes(key));
+
+api.post('/api/action', (req, res) => {
+    const { type, passcode, room: roomId } = req.body;
+    if (roomId == null) {
+        res.status(400).send({ error: 'Must provide room ID' });
+        return;
+    }
+    const room = store.getState()[roomId];
+    if (needsRoomPermission.has(type) && (passcode == null || room.passcode !== passcode)) {
+        res.status(403).send({ error: `Passcode incorrect for room ${roomId}`});
+        return;
+    }
+
     store.dispatch(req.body);
-    res.send(store.getState());
+    res.send(redact(store.getState()[roomId]));
 });
-api.get('/api', (req, res) => res.send(store.getState()));
+api.get('/api/state/:room', (req, res) => {
+    const { room: roomId } = req.params;
+    if (roomId == null) {
+        res.status(400).send({ error: 'Must provide room ID' });
+        return;
+    }
+    const room = store.getState()[roomId];
+    if (room == null) {
+        res.status(404).send({ error: `No such room ${roomId}` });
+        return;
+    }
+    res.send(redact(room));
+});
 api.listen(8080);
+
+console.log('REST API listening on 8080');
 
 // Realtime API
 const rt = http.createServer();
@@ -27,12 +58,18 @@ wss.on('connection', (socket, req) => {
     console.log('Someone listening for ', socket.room);
 });
 
+let prevState = {};
 store.subscribe(() => {
-    const states = store.getState()
-    const state = JSON.stringify(store.getState());
-    wss.clients.forEach(client => {
-        client.send(state);
+    const state = store.getState();
+    const changed = filterValues(state, (newState, key) => prevState[key] !== newState);
+    const updates = mapValues(changed, s => JSON.stringify(s));
+    prevState = state;
+    wss.clients.forEach(socket => {
+        if (updates.hasOwnProperty(socket.room)) {
+            socket.send(updates[socket.room]);
+        }
     });
 });
 
 rt.listen(8081);
+console.log('Realtime API listening on 8081');
