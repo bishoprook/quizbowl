@@ -6,7 +6,7 @@ const lobbyReducer = (state = {}, action) => {
     const { room: roomId, passcode } = action;
     switch (action.type) {
         case actionTypes.CREATE:
-            return Object.assign({}, { [roomId]: roomReducer({ id: roomId, passcode }, action) }, state);
+            return { [roomId]: roomReducer({ id: roomId, passcode }, action), ...state };
         default:
             return mapValues(state, room => roomReducer(room, action));
     }
