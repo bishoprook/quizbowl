@@ -1,9 +1,7 @@
 import createReducer from './createReducer.js';
 import { create } from '../../actions/actions.js';
 
-const mockContext = id => ({
-    idGenerator: () => id
-});
+const mockContext = id => ({ idGenerator: () => id });
 
 test('adds to an empty initial state', () => {
     const initialState = {};

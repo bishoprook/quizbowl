@@ -2,12 +2,24 @@ import deepMerge from './deepMerge.js';
 
 const harness = (a, b, c) => expect(deepMerge(a, b)).toStrictEqual(c);
 
+test('favors non-null source', () => {
+    harness(null, 2, 2);
+});
+
+test('favors non-null target', () => {
+    harness(2, null, 2);
+});
+
 test('overwrites basic types with source', () => {
     harness(2, 7, 7);
 });
 
 test('merges arrays, target first', () => {
     harness(['a', 'b'], ['c'], ['a', 'b', 'c']);
+});
+
+test('array merge is union', () => {
+    harness(['a', 'b'], ['b', 'c'], ['a', 'b', 'c']);
 });
 
 test('merges object properties', () => {

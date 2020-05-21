@@ -1,8 +1,19 @@
+export const actionScopes = {
+    ROOT: 'root',
+    ROOM: 'room'
+};
+
 export const actionTypes = {
     CREATE: 'create',
     ADD_QUESTION: 'addQuestion',
     SHOW_QUESTION: 'showQuestion'
-}
+};
+
+export const typesToScopes = {
+    [actionTypes.CREATE]: actionScopes.ROOT,
+    [actionTypes.ADD_QUESTION]: actionScopes.ROOM,
+    [actionTypes.SHOW_QUESTION]: actionScopes.ROOM
+};
 
 export const buzz = actor => ({ type: 'BUZZ', actor });
 export const clear = () => ({ type: 'CLEAR' });

@@ -1,6 +1,14 @@
 const deepMerge = (target, source) => {
-    if (target.constructor === Array && source.constructor === Array) {
-        return [].concat(target).concat(source);
+    if (target == null) {
+        return source;
+    }
+    else if (source == null) {
+        return target;
+    }
+    else if (target.constructor === Array && source.constructor === Array) {
+        const targetSet = new Set(target);
+        const additions = source.filter(t => !targetSet.has(t));
+        return [].concat(target).concat(additions);
     }
     else if (target.constructor === Object && source.constructor === Object) {
         const sourceProps = new Set(Object.keys(source));

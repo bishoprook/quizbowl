@@ -1,5 +1,5 @@
-import { actionTypes } from '../../actions/actions.js';
-import create from './create.js';
+import { actionTypes, actionScopes, typesToScopes } from '../../actions/actions.js';
+import createReducer from './createReducer.js';
 import roomReducer from './roomReducer.js';
 import deepMerge from '../../util/deepMerge.js';
 
@@ -25,23 +25,22 @@ import deepMerge from '../../util/deepMerge.js';
 
 
 
-export const rootReducer = context => (previousState, action) => {
+const rootReducer = context => (previousState, action) => {
     switch (action.type) {
         case actionTypes.CREATE:
-            return create(context)(previousState, action);
-        case actionTypes.ADD_QUESTION:
-        case actionTypes.SHOW_QUESTION:
-            const { roomId } = action;
-            /*
-            if (!previousState.rooms || !previousState.rooms[roomId]) {
-                throw new ApiError(404, `room ${roomId} not found`);
-            }
-            const { passcode } = previousState.rooms
-            Use middleware for this
-            */
-           const newRoom = roomReducer(context)(previousState.rooms[roomId]);
-           return deepMerge(previousState, { rooms: { [roomId]: newRoom } });
-        default:
-            return previousState;
+            return createReducer(context)(previousState, action);
     }
+
+    switch (typesToScopes[action.type]) {
+        case actionScopes.ROOM:
+            const { room: roomId } = action;
+            if (previousState.rooms.hasOwnProperty(roomId)) {
+                const newRoom = roomReducer(context)(previousState.rooms[roomId], action);
+                return deepMerge(previousState, { rooms: { [roomId]: newRoom } });
+            }
+    }
+
+    return previousState;
 }
+
+export default rootReducer;
