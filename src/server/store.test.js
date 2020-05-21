@@ -12,22 +12,23 @@ test('action sequence', () => {
     const store = createStore(lobbyReducer);
 
     [
-        actions.create('BOBA'),
-        actions.addQuestion('BOBA', 'what rolls down stairs'),
-        actions.showQuestion('BOBA', 1),
-        actions.addQuestion('BOBA', 'rolls over your neighbors dog'),
+        actions.create('BOBA', 'pass'),
+        actions.addQuestion('BOBA', 'pass', 'what rolls down stairs'),
+        actions.showQuestion('BOBA', 'pass', 1),
+        actions.addQuestion('BOBA', 'pass', 'rolls over your neighbors dog'),
         actions.addPlayer('BOBA', 'katie'),
-        actions.addQuestion('BOBA', 'alone or in pairs', 1),
-        actions.showQuestion('BOBA', 2),
+        actions.addQuestion('BOBA', 'pass', 'alone or in pairs', 1),
+        actions.showQuestion('BOBA', 'pass', 2),
         actions.addPlayer('BOBA', 'dan'),
         actions.buzz('BOBA', 'katie'),
         actions.buzz('BOBA', 'dan'),
-        actions.addPoints('BOBA', 'dan', 3)
+        actions.addPoints('BOBA', 'pass', 'dan', 3)
     ].forEach(a => store.dispatch(a));
 
     const expected = {
         BOBA: {
             id: 'BOBA',
+            passcode: 'pass',
             players: ['katie', 'dan'],
             buzzed: 'katie',
             scores: { katie: 0, dan: 3 },

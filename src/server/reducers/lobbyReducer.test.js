@@ -2,9 +2,10 @@ import reducer from './lobbyReducer.js';
 import * as actions from '../../actions/actions.js';
 
 test('create adds a new empty room', () => {
-    expect(reducer({}, actions.create('IXVY'))).toStrictEqual({
+    expect(reducer({}, actions.create('IXVY', 'password'))).toStrictEqual({
         IXVY: {
             id: 'IXVY',
+            passcode: 'password',
             players: [],
             buzzed: null,
             scores: {},
@@ -22,6 +23,7 @@ test('addPlayer on a real room adds player', () => {
     const state = {
         MANA: {
             id: 'MANA',
+            passcode: 'password',
             players: [],
             buzzed: null,
             scores: {},
@@ -35,6 +37,7 @@ test('addPlayer on a real room adds player', () => {
     const expected = {
         MANA: {
             id: 'MANA',
+            passcode: 'password',
             players: ['celestine'],
             buzzed: null,
             scores: { celestine: 0 },
