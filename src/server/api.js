@@ -20,6 +20,11 @@ api.use(express.json());
 
 const redact = room => filterValues(room, (v, key) => !['passcode'].includes(key));
 
+api.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 api.post('/api/action', (req, res) => {
     const { room: roomId } = req.body;
     store.dispatch(req.body);
