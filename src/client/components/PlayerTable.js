@@ -1,27 +1,63 @@
 import React from 'react';
 
+import { addPoints, removePoints, clearBuzzer } from '../../actions/actions.js';
+
 import RoomContext from './RoomContext.js';
 import Buzzer from './Buzzer.js';
+import Table from 'react-bootstrap/Table';
+import ActionButton from './ActionButton.js';
 
-const PlayerTable = () => (
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+
+const clear = (getPasscode) =>
+    <ActionButton
+        size="sm"
+        action={room => clearBuzzer(room, getPasscode())}
+    >
+        {'Clear buzzer'}
+    </ActionButton>;
+
+const increment = (getPasscode, player) =>
+    <ActionButton
+        size="sm"
+        action={room => addPoints(room, getPasscode(), player)}
+    >
+        {'+'}
+    </ActionButton>;
+
+const decrement = (getPasscode, player) =>
+    <ActionButton
+        size="sm"
+        action={room => removePoints(room, getPasscode(), player)}
+    >
+        {'−'}
+    </ActionButton>;
+
+const PlayerTable = ({ getPasscode }) => (
     <RoomContext.Consumer>
         {({ roomState: { players = [], scores = {} } }) => (
-            <table>
+            <Table size="sm" striped bordered hover>
                 <tbody>
                     <tr>
                         <th>Player name</th>
                         <th>Score</th>
-                        <th></th>
+                        <th>{clear(getPasscode)}</th>
                     </tr>
                     {players.map(player => (
                         <tr key={`player-row-${player}`}>
                             <td>{player}</td>
-                            <td>{scores[player]}</td>
-                            <td><Buzzer name={player}>Buzz {player}</Buzzer></td>
+                            <td>
+                                <span>{scores[player]}</span>
+                                <ButtonGroup className="ml-2">
+                                    {increment(getPasscode, player)}
+                                    {decrement(getPasscode, player)}
+                                </ButtonGroup>
+                            </td>
+                            <td><Buzzer size="sm" variant="link" name={player}>Buzz {player}</Buzzer></td>
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </Table>
         )}
     </RoomContext.Consumer>
 )

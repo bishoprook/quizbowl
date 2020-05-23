@@ -3,9 +3,9 @@ import RoomContext from './RoomContext.js';
 
 const RoomStateJson = () => (
     <RoomContext.Consumer>
-        {({ loading, roomState }) => loading ?
-            <span>Loading...</span> :
-            <span>Room state {JSON.stringify(roomState)}</span>}
+        {({ roomState }) => (
+            <pre>{JSON.stringify(roomState, null, 2)}</pre>
+        )}
     </RoomContext.Consumer>
 )
 

@@ -3,16 +3,16 @@ import { buzz } from '../../actions/actions.js';
 import RoomContext from './RoomContext.js';
 import ActionButton from './ActionButton.js';
 
-const Buzzer = ({ name, children }) => (
+const Buzzer = ({ name, children, ...props }) => (
     <RoomContext.Consumer>
         {({ room, roomState: { buzzed }}) => (
             <ActionButton
-            action={() => {
-                return buzz(room, name);
-            }}
-            disabled={() => {
-                return buzzed != null;
-            }}>{children}</ActionButton>
+            action={() => buzz(room, name)}
+            disabled={() => buzzed != null}
+            {...props}
+            >
+                {children}
+            </ActionButton>
         )}
     </RoomContext.Consumer>
 )
