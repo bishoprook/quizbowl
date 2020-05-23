@@ -1,26 +1,46 @@
 import http from 'http';
 import ws from 'ws';
 
-const server = http.createServer();
-const wss = new ws.Server({ server });
+import mapValues from '../util/mapValues.js';
+import filterValues from '../util/filterValues.js';
 
-wss.on('connection', conn => {
+const realtime = store => {
+    // Realtime API
+    const rt = http.createServer();
+    const wss = new ws.Server({ server: rt });
 
-    conn.on('message', message => {
-        console.log()
-        conn.send(`Hi ${message}`);
+    const redact = room => filterValues(room, (v, key) => !['passcode'].includes(key));
+
+    wss.on('connection', (socket, req) => {
+        socket.room = req.url.slice(1);
+        console.log('Someone listening for ', socket.room);
+        socket.on('message', payload => {
+            const action = JSON.parse(payload);
+            console.log('Got action: ', action);
+            store.dispatch(action);
+        });
+        // Send initial state
+        const state = store.getState();
+        if (state.hasOwnProperty(socket.room)) {
+            socket.send(JSON.stringify(redact(state[socket.room])));
+        }
     });
 
-    conn.send('Logged on, who dis');
-});
+    let prevState = {};
+    store.subscribe(() => {
+        const state = store.getState();
+        const changed = filterValues(state, (newState, key) => prevState[key] !== newState);
+        const updates = mapValues(changed, s => JSON.stringify(redact(s)));
+        prevState = state;
+        wss.clients.forEach(socket => {
+            if (updates.hasOwnProperty(socket.room)) {
+                socket.send(updates[socket.room]);
+            }
+        });
+    });
 
-server.listen(8080);
+    rt.listen(8081);
+    console.log('Realtime API listening on 8081');
+}
 
-api.post('/api/:roomId', (req, res) => {
-    store.dispatch(req.body);
-    res.send(store.getState());
-});
-
-api.get('/api/:roomId', (req, res) => res.send(store.getState()));
-
-api.listen(8080);
+export default realtime;
