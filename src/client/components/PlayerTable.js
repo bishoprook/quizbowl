@@ -50,7 +50,7 @@ const PlayerTable = ({ getPasscode }) => (
                     <tr>
                         <th>Player name</th>
                         <th>Score</th>
-                        <th>{clear(getPasscode)}</th>
+                        <th colspan="2">{clear(getPasscode)}</th>
                     </tr>
                     {players.map(player => (
                         <tr key={`player-row-${player}`}>

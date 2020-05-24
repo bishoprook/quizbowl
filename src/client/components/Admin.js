@@ -3,6 +3,8 @@ import React from 'react';
 import RoomStateJson from './RoomStateJson.js';
 import PlayerTable from './PlayerTable.js';
 import Scoreboard from './Scoreboard.js';
+import QuestionDisplay from './QuestionDisplay.js';
+import QuestionTable from './QuestionTable.js';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -16,7 +18,12 @@ const Admin = () => {
         <Container>
             <Row>
                 <Col>
-                    <h1>Admin</h1>
+                    <Scoreboard />
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <QuestionDisplay />
                 </Col>
             </Row>
             <Row>
@@ -29,12 +36,12 @@ const Admin = () => {
             </Row>
             <Row>
                 <Col>
-                    <Scoreboard />
+                    <PlayerTable getPasscode={getPasscode} />
                 </Col>
             </Row>
             <Row>
                 <Col>
-                    <PlayerTable getPasscode={getPasscode} />
+                    <QuestionTable getPasscode={getPasscode} />
                 </Col>
             </Row>
             <Row>
