@@ -1,5 +1,5 @@
 import reducer from './playersReducer.js';
-import { addPlayer } from '../../actions/actions.js';
+import { addPlayer, removePlayer } from '../../actions/actions.js';
 
 test('adds new player to empty room', () => {
     expect(reducer([], addPlayer(null, 'dan'))).toStrictEqual(['dan']);
@@ -11,4 +11,12 @@ test('adds new player to end of existing room', () => {
 
 test('does not add already existing player', () => {
     expect(reducer(['katie', 'dan'], addPlayer(null, 'katie'))).toStrictEqual(['katie', 'dan']);
+});
+
+test('remove player that is not there is no op', () => {
+    expect(reducer(['katie'], removePlayer(null, null, 'dan'))).toStrictEqual(['katie']);
+});
+
+test('removes player that is there', () => {
+    expect(reducer(['katie', 'dan'], removePlayer(null, null, 'dan'))).toStrictEqual(['katie']);
 });

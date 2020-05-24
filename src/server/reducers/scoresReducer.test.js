@@ -1,5 +1,5 @@
 import reducer from './scoresReducer.js';
-import { addPlayer, addPoints, removePoints, setScore } from '../../actions/actions.js';
+import { addPlayer, removePlayer, addPoints, removePoints, setScore } from '../../actions/actions.js';
 
 test('tracks newly added players', () => {
     expect(reducer({}, addPlayer(null, 'dan'))).toStrictEqual({ dan: 0 });
@@ -39,4 +39,12 @@ test('sets player score', () => {
 
 test('does not set score for nonexistent player', () => {
     expect(reducer({ dan: 3, wes: 5 }, setScore(null, null, 'thandor', 3))).toStrictEqual({ dan: 3, wes: 5 });
+});
+
+test('removes existing player from scores', () => {
+    expect(reducer({ dan: 3, wes: 5 }, removePlayer(null, null, 'dan'))).toStrictEqual({ wes: 5 });
+});
+
+test('remove is a no op if non existent', () => {
+    expect(reducer({ dan: 5 }, removePlayer(null, null, 'wes'))).toStrictEqual({ dan: 5 });
 });

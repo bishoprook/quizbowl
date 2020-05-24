@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { addPoints, removePoints, clearBuzzer } from '../../actions/actions.js';
+import { addPoints, removePoints, clearBuzzer, removePlayer } from '../../actions/actions.js';
 
 import RoomContext from './RoomContext.js';
 import Buzzer from './Buzzer.js';
@@ -33,6 +33,15 @@ const decrement = (getPasscode, player) =>
         {'−'}
     </ActionButton>;
 
+const remove = (getPasscode, player) =>
+    <ActionButton
+        size="sm"
+        variant="danger"
+        action={room => removePlayer(room, getPasscode(), player)}
+    >
+        {'Remove'}
+    </ActionButton>;
+
 const PlayerTable = ({ getPasscode }) => (
     <RoomContext.Consumer>
         {({ roomState: { players = [], scores = {} } }) => (
@@ -54,6 +63,7 @@ const PlayerTable = ({ getPasscode }) => (
                                 </ButtonGroup>
                             </td>
                             <td><Buzzer size="sm" variant="link" name={player}>Buzz {player}</Buzzer></td>
+                            <td>{remove(getPasscode, player)}</td>
                         </tr>
                     ))}
                 </tbody>

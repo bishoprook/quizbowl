@@ -3,6 +3,7 @@ export const actionTypes = {
     ADD_QUESTION: 'addQuestion',
     SHOW_QUESTION: 'showQuestion',
     ADD_PLAYER: 'addPlayer',
+    REMOVE_PLAYER: 'removePlayer',
     BUZZ: 'buzz',
     CLEAR_BUZZER: 'clearBuzzer',
     ADD_POINTS: 'addPoints',
@@ -16,7 +17,8 @@ export const needsRoomPermission = new Set([
     actionTypes.CLEAR_BUZZER,
     actionTypes.ADD_POINTS,
     actionTypes.REMOVE_POINTS,
-    actionTypes.SET_SCORE
+    actionTypes.SET_SCORE,
+    actionTypes.REMOVE_PLAYER
 ]);
 
 export const validWithoutExistingRoom = new Set([
@@ -38,6 +40,10 @@ export function showQuestion(room, passcode, index) {
 export function addPlayer(room, name) {
     return { type: actionTypes.ADD_PLAYER, room, name };
 };
+
+export function removePlayer(room, passcode, name) {
+    return { type: actionTypes.REMOVE_PLAYER, room, passcode, name };
+}
 
 export function buzz(room, name) {
     return { type: actionTypes.BUZZ, room, name };
