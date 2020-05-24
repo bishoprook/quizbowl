@@ -20,7 +20,7 @@ class RoomProvider extends React.PureComponent {
     }
 
     openSocket = () => {
-        this.socket = new WebSocket(`ws://localhost:8081/${this.props.room}`);
+        this.socket = new WebSocket(`ws://192.168.86.101:8081/${this.props.room}`);
         this.socket.onmessage = ({ data }) => this.setState({
             loading: false,
             sendAction: this.sendAction,

@@ -10,7 +10,7 @@ const rest = store => {
     const redact = room => filterValues(room, (v, key) => !['passcode'].includes(key));
 
     api.use((req, res, next) => {
-        res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+        res.header('Access-Control-Allow-Origin', 'http://192.168.86.101:3000');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         next();
     });

@@ -20,7 +20,7 @@ const SpectatorRoute = ({ match: { params: { room } } }) =>
 class Root extends React.PureComponent {
     render() {
         return (
-            <Router>
+            <Router className="h-100">
                 <Switch>
                     <Route path="/admin/:room" component={AdminRoute} />
                     <Route path="/player/:room" component={PlayerRoute} />
