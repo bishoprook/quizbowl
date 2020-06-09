@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { addPlayer } from '../../actions/actions.js';
+import { addPlayer } from '../actions/actions.js';
 import RoomContext from './RoomContext.js';
 
 import Button from 'react-bootstrap/Button';

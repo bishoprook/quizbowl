@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import { showQuestion, addQuestion } from '../../actions/actions.js';
+import { showQuestion, addQuestion } from '../actions/actions.js';
 
 import RoomContext from './RoomContext.js';
 import ActionButton from './ActionButton.js';

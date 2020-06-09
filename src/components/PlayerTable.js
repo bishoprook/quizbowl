@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { addPoints, removePoints, clearBuzzer, removePlayer } from '../../actions/actions.js';
+import { addPoints, removePoints, clearBuzzer, removePlayer } from '../actions/actions.js';
 
 import RoomContext from './RoomContext.js';
 import Buzzer from './Buzzer.js';
@@ -50,7 +50,7 @@ const PlayerTable = ({ getPasscode }) => (
                     <tr>
                         <th>Player name</th>
                         <th>Score</th>
-                        <th colspan="2">{clear(getPasscode)}</th>
+                        <th colSpan="2">{clear(getPasscode)}</th>
                     </tr>
                     {players.map(player => (
                         <tr key={`player-row-${player}`}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { buzz } from '../../actions/actions.js';
+import { buzz } from '../actions/actions.js';
 import RoomContext from './RoomContext.js';
 import ActionButton from './ActionButton.js';
 
