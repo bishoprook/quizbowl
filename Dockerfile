@@ -1,13 +1,13 @@
-FROM node:14
-WORKDIR /usr/src/app
+FROM nginx
 
-COPY package.json ./
-COPY yarn.lock ./
-RUN yarn install --frozen-lockfile
+COPY nginx.conf /etc/nginx/nginx.conf
 
-COPY . .
+# Create the directory for app logs defined in nginx.conf
+RUN mkdir -p /var/log/app_engine
 
-ENV PORT 80
-EXPOSE ${PORT}
+# Simple health check
+RUN mkdir -p /usr/share/nginx/www/_ah && \
+    echo "healthy" > /usr/share/nginx/www/_ah/health
 
-CMD [ "yarn", "start" ]
+ADD build/ /usr/share/nginx/www/
+RUN chmod -R a+r /usr/share/nginx/www
