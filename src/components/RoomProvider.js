@@ -29,14 +29,13 @@ const useSocket = room => {
         const socket = new WebSocket(`wss://quizbowl-api.uc.r.appspot.com/${room}`);
 
         socket.onmessage = ({ data }) => {
+            const roomState = JSON.parse(data);
+            playSoundForAction(roomState.lastAction, play);
             setState({
                 room,
+                roomState,
                 loading: false,
-                sendAction: action => {
-                    playSoundForAction(action, play);
-                    socket.send(JSON.stringify(action));
-                },
-                roomState: JSON.parse(data)
+                sendAction: action => socket.send(JSON.stringify(action))
             });
         };
 
