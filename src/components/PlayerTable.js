@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { addPoints, removePoints, clearBuzzer, removePlayer } from '../actions/actions.js';
+import { addPoints, removePoints, clearBuzzer, removePlayer, showQuestion } from '../actions/actions.js';
 
 import RoomContext from './RoomContext.js';
 import Buzzer from './Buzzer.js';
@@ -15,6 +15,14 @@ const clear = (getPasscode) =>
         action={room => clearBuzzer(room, getPasscode())}
     >
         {'Clear buzzer'}
+    </ActionButton>;
+
+const clearQuestion = (getPasscode) =>
+    <ActionButton
+        size="sm"
+        action={room => showQuestion(room, getPasscode(), null, null)}
+    >
+        {'Clear question'}
     </ActionButton>;
 
 const increment = (getPasscode, player) =>
@@ -50,7 +58,8 @@ const PlayerTable = ({ getPasscode }) => (
                     <tr>
                         <th>Player name</th>
                         <th>Score</th>
-                        <th colSpan="2">{clear(getPasscode)}</th>
+                        <th>{clear(getPasscode)}</th>
+                        <th>{clearQuestion(getPasscode)}</th>
                     </tr>
                     {players.map(player => (
                         <tr key={`player-row-${player}`}>

@@ -10,45 +10,65 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 const QuestionTable = ({ getPasscode }) => {
-    const newQuestionRef = useRef(null);
+    const newSubjectRef = useRef(null);
+    const newPagesRef = useRef(null);
 
     return <RoomContext.Consumer>
         {({ sendAction, room, roomState: { questions = [], showing } }) => {
 
         const submitNew = () => {
-            const text = newQuestionRef.current.value;
-            if (text !== '') {
-                sendAction(addQuestion(room, getPasscode(), text));
+            const subject = newSubjectRef.current.value;
+            const pages = newPagesRef.current.value.split('|');
+            if (subject !== '' && pages[0] !== '') {
+                sendAction(addQuestion(room, getPasscode(), subject, pages));
             }
-            newQuestionRef.current.value = '';
+            newSubjectRef.current.value = '';
+            newPagesRef.current.value = '';
         };
         
         return <Table size="sm" striped bordered hover>
                 <tbody>
                     <tr>
                         <th>Index</th>
+                        <th>Subject</th>
                         <th>Question text</th>
                         <th></th>
                     </tr>
                     {questions.map((question, idx) => (
-                        <tr key={`question-row-${idx}`}>
-                            <td>{idx + 1}</td>
-                            <td>{question.text}</td>
-                            <td>
-                                <ActionButton
-                                    size="sm"
-                                    action={room => showQuestion(room, getPasscode(), idx)}
-                                >
-                                    {'Show'}
-                                </ActionButton>
-                            </td>
-                        </tr>
+                        question.pages.map((page, pageNum) => (
+                            <tr key={`question-row-${idx}-${pageNum}`}>
+                                <td>{pageNum !== 0 ? '' : (<>
+                                    <span>{idx + 1}</span>
+                                    <ActionButton
+                                        size="sm"
+                                        action={room => showQuestion(room, getPasscode(), idx, null)}
+                                    >
+                                        {'Show'}
+                                    </ActionButton>
+                                </>)}</td>
+                                <td>{pageNum !== 0 ? '' : question.subject}</td>
+                                <td>{page}</td>
+                                <td>
+                                    <ActionButton
+                                        size="sm"
+                                        action={room => showQuestion(room, getPasscode(), idx, pageNum)}
+                                    >
+                                        {'Show'}
+                                    </ActionButton>
+                                </td>
+                            </tr>
+                        ))
                     ))}
                     <tr>
                         <td></td>
                         <td>
                             <Form onSubmit={submitNew}>
-                                <Form.Control ref={newQuestionRef} type="text" />
+                                <Form.Control ref={newSubjectRef} type="text" />
+                            </Form>
+                        </td>
+                        <td>
+                            <Form onSubmit={submitNew}>
+                                <Form.Control ref={newPagesRef} type="text" />
                             </Form>
                         </td>
                         <td>
