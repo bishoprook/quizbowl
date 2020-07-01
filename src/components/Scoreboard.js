@@ -25,15 +25,19 @@ const TeamCard = ({ teamName, score, isBuzzed, children }) => {
 
 const Scoreboard = ({ owner }) => (
     <RoomContext.Consumer>
-        {({ roomState: { teams, scores, buzzed } }) => {
+        {({ roomState: { teams, players, scores, buzzed } }) => {
             const buzzedTeam = buzzed && buzzed[0] && buzzed[0][0];
 
             return <CardDeck>
                 {Object.keys(teams).map(teamName => {
-                    const buzzerButton = teams[owner] === teamName ?
+                    const buzzerButton = players[owner] === teamName ?
                         <Buzzer className="p-4" size="lg" block name={owner}>Buzz</Buzzer> :
                         null;
-                    return <TeamCard teamName={teamName} score={scores[teamName]} isBuzzed={buzzedTeam === teamName}>
+                    return <TeamCard
+                        key={`${teamName}-card`}
+                        teamName={teamName}
+                        score={scores[teamName]}
+                        isBuzzed={buzzedTeam === teamName}>
                             {buzzerButton}
                         </TeamCard>
                 })}

@@ -26,9 +26,15 @@ const useSocket = room => {
     });
 
     useEffect(() => {
-        const socket = new WebSocket(`wss://quizbowl-api.uc.r.appspot.com/${room}`);
+        const socket = new WebSocket(`wss://quizbowl-api.rook.codes/${room}`);
 
+        let isAlive = true;
         socket.onmessage = ({ data }) => {
+            if (data === '__pong__') {
+                isAlive = true;
+                return;
+            }
+
             const roomState = JSON.parse(data);
             playSoundForAction(roomState.lastAction, play);
             setState({
@@ -39,15 +45,14 @@ const useSocket = room => {
             });
         };
 
-        let isAlive = true;
         const heartbeat = setInterval(() => {
-            if (!isAlive) {
-                console.log('Server connection is dead');
-                // Force a page refresh or what??
+            if (isAlive === false) {
+                console.log('Server is dead??');
             }
             isAlive = false;
             console.log('Heartbeat');
-        }, 10000);
+            socket.send('__ping__');
+        });
 
         return closeSocket(socket, heartbeat);
     }, [room, play]);
@@ -56,8 +61,8 @@ const useSocket = room => {
 }
 
 const closeSocket = (socket, heartbeat) => () => {
-    clearInterval(heartbeat);
     socket.onmessage = null;
+    clearInterval(heartbeat);
     switch(socket.readyState) {
         case WebSocket.CONNECTING:
             socket.onopen = () => socket.close();

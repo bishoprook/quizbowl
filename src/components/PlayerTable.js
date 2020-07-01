@@ -52,7 +52,7 @@ const remove = (getPasscode, player) =>
 
 const PlayerTable = ({ getPasscode }) => (
     <RoomContext.Consumer>
-        {({ roomState: { players = {}, teams = {}, scores = {} } }) => (
+        {({ roomState: { players = {}, scores = {} } }) => (
             <Table size="sm" striped bordered hover>
                 <tbody>
                     <tr>
@@ -65,11 +65,12 @@ const PlayerTable = ({ getPasscode }) => (
                     {Object.keys(players).map(player => (
                         <tr key={`player-row-${player}`}>
                             <td>{player}</td>
+                            <td>{players[player]}</td>
                             <td>
-                                <span>{scores[teams[player]]}</span>
+                                <span>{scores[players[player]]}</span>
                                 <ButtonGroup className="ml-2">
-                                    {increment(getPasscode, teams[player])}
-                                    {decrement(getPasscode, teams[player])}
+                                    {increment(getPasscode, players[player])}
+                                    {decrement(getPasscode, players[player])}
                                 </ButtonGroup>
                             </td>
                             <td><Buzzer size="sm" variant="link" name={player}>Buzz {player}</Buzzer></td>
