@@ -47,12 +47,11 @@ const useSocket = room => {
 
         const heartbeat = setInterval(() => {
             if (isAlive === false) {
-                console.log('Server is dead??');
+                setState({ room, loading: true });
             }
             isAlive = false;
-            console.log('Heartbeat');
             socket.send('__ping__');
-        });
+        }, 5000);
 
         return closeSocket(socket, heartbeat);
     }, [room, play]);
@@ -79,7 +78,7 @@ const RoomProvider = ({ room, children }) => {
     const [state] = useSocket(room);
 
     return state.loading ?
-        <span>Loading...</span> :
+        <span>Loading... (Try refreshing?)</span> :
         <RoomContext.Provider value={state}>
             {children}
         </RoomContext.Provider>;

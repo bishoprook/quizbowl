@@ -9,9 +9,9 @@ const headerCard = (idx, subject) => (
         text="dark"
         className="my-3 text-center"
     >
-        <Card.Header><h4>Question {idx+1}</h4></Card.Header>
+        <Card.Header className="h4">Question {idx+1}</Card.Header>
         <Card.Body>
-            <Card.Text><h1>{subject}</h1></Card.Text>
+            <Card.Text className="h2">{subject}</Card.Text>
         </Card.Body>
     </Card>
 );
@@ -22,9 +22,9 @@ const textCard = (idx, subject, text) => (
         text="dark"
         className="my-3 text-center"
     >
-        <Card.Header><h4>Question {idx+1}: {subject}</h4></Card.Header>
+        <Card.Header className="h4">Question {idx+1}: {subject}</Card.Header>
         <Card.Body>
-            <Card.Text>{text}</Card.Text>
+            <Card.Text className="lead">{text}</Card.Text>
         </Card.Body>
     </Card>
 )
