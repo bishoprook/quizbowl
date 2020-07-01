@@ -16,7 +16,7 @@ const headerCard = (idx, subject) => (
     </Card>
 );
 
-const pageCard = (idx, subject, page) => (
+const textCard = (idx, subject, text) => (
     <Card
         bg="light"
         text="dark"
@@ -24,18 +24,18 @@ const pageCard = (idx, subject, page) => (
     >
         <Card.Header><h4>Question {idx+1}: {subject}</h4></Card.Header>
         <Card.Body>
-            <Card.Text>{page}</Card.Text>
+            <Card.Text>{text}</Card.Text>
         </Card.Body>
     </Card>
 )
 
 const QuestionDisplay = () => (
     <RoomContext.Consumer>
-        {({ roomState: { questions, showing: [idx, page] } }) => (
+        {({ roomState: { questions, showing: [idx, reveal] } }) => (
             idx == null ? null :
-                page == null ?
-                    headerCard(idx, questions[idx].subject) :
-                    pageCard(idx, questions[idx].subject, questions[idx].pages[page])
+                reveal ?
+                    textCard(idx, questions[idx].subject, questions[idx].text) :
+                    headerCard(idx, questions[idx].subject)
         )}
     </RoomContext.Consumer>
 )

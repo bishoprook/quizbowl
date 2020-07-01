@@ -31,16 +31,16 @@ export function create(room, passcode) {
     return { type: actionTypes.CREATE, room, passcode };
 };
 
-export function addQuestion(room, passcode, subject, pages, index = undefined) {
-    return { type: actionTypes.ADD_QUESTION, room, passcode, subject, pages, index };
+export function addQuestion(room, passcode, subject, text, index = undefined) {
+    return { type: actionTypes.ADD_QUESTION, room, passcode, subject, text, index };
 };
 
 export function removeQuestion(room, passcode, index) {
     return { type: actionTypes.REMOVE_QUESTION, room, passcode, index };
 };
 
-export function showQuestion(room, passcode, index, page) {
-    return { type: actionTypes.SHOW_QUESTION, room, passcode, index, page };
+export function showQuestion(room, passcode, index, reveal) {
+    return { type: actionTypes.SHOW_QUESTION, room, passcode, index, reveal };
 };
 
 export function addPlayer(room, name) {

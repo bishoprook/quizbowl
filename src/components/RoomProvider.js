@@ -39,13 +39,24 @@ const useSocket = room => {
             });
         };
 
-        return closeSocket(socket);
+        let isAlive = true;
+        const heartbeat = setInterval(() => {
+            if (!isAlive) {
+                console.log('Server connection is dead');
+                // Force a page refresh or what??
+            }
+            isAlive = false;
+            console.log('Heartbeat');
+        }, 10000);
+
+        return closeSocket(socket, heartbeat);
     }, [room, play]);
 
     return [state];
 }
 
-const closeSocket = socket => () => {
+const closeSocket = (socket, heartbeat) => () => {
+    clearInterval(heartbeat);
     socket.onmessage = null;
     switch(socket.readyState) {
         case WebSocket.CONNECTING:

@@ -6,18 +6,18 @@ import CardDeck from 'react-bootstrap/CardDeck';
 
 import Buzzer from './Buzzer.js';
 
-const playerCard = (player, score, isBuzzed, showBuzz) => {
+const TeamCard = ({ teamName, score, isBuzzed, children }) => {
     return (
         <Card
-            key={`player-card-${player}`}
+            key={`team-card-${teamName}`}
             bg={isBuzzed ? 'success' : 'light'}
             text={isBuzzed ? 'light' : 'dark'}
             className="text-center"
         >
             <Card.Body>
-                <Card.Title>{player}</Card.Title>
+                <Card.Title>{teamName}</Card.Title>
                 <Card.Text className="display-1">{score}</Card.Text>
-                {showBuzz ? <Buzzer className="p-4" size="lg" block name={player}>Buzz</Buzzer> : null}
+                {children}
             </Card.Body>
         </Card>
     );
@@ -25,11 +25,20 @@ const playerCard = (player, score, isBuzzed, showBuzz) => {
 
 const Scoreboard = ({ owner }) => (
     <RoomContext.Consumer>
-        {({ roomState: { players, scores, buzzed } }) => (
-            <CardDeck>
-                {players.map(player => playerCard(player, scores[player], buzzed === player, owner === player))}
+        {({ roomState: { teams, scores, buzzed } }) => {
+            const buzzedTeam = buzzed && buzzed[0] && buzzed[0][0];
+
+            return <CardDeck>
+                {Object.keys(teams).map(teamName => {
+                    const buzzerButton = teams[owner] === teamName ?
+                        <Buzzer className="p-4" size="lg" block name={owner}>Buzz</Buzzer> :
+                        null;
+                    return <TeamCard teamName={teamName} score={scores[teamName]} isBuzzed={buzzedTeam === teamName}>
+                            {buzzerButton}
+                        </TeamCard>
+                })}
             </CardDeck>
-        )}
+        }}
     </RoomContext.Consumer>
 )
 

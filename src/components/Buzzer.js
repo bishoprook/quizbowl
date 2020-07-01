@@ -8,7 +8,7 @@ const Buzzer = ({ name, children, ...props }) => (
         {({ room, roomState: { buzzed }}) => (
             <ActionButton
             action={() => buzz(room, name)}
-            disabled={() => buzzed != null}
+//            disabled={() => buzzed != null}
             {...props}
             >
                 {children}
