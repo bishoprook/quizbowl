@@ -5,10 +5,10 @@ import ActionButton from './ActionButton.js';
 
 const Buzzer = ({ name, children, ...props }) => (
     <RoomContext.Consumer>
-        {({ room, roomState: { buzzed }}) => (
+        {({ room, roomState: { players, buzzed }}) => (
             <ActionButton
             action={() => buzz(room, name)}
-//            disabled={() => buzzed != null}
+            disabled={() => locked(players[name], buzzed)}
             {...props}
             >
                 {children}
@@ -16,5 +16,9 @@ const Buzzer = ({ name, children, ...props }) => (
         )}
     </RoomContext.Consumer>
 )
+
+const locked = (teamName, buzzed) => (
+    buzzed.filter(([buzzedTeam, _]) => buzzedTeam === teamName).length !== 0
+);
 
 export default Buzzer;

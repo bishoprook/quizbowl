@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { addPoints, removePoints, clearBuzzer, removePlayer, showQuestion } from '../actions/actions.js';
+import { addPoints, removePoints, clearBuzzer, nextBuzzer, removePlayer, showQuestion } from '../actions/actions.js';
 
 import RoomContext from './RoomContext.js';
 import Buzzer from './Buzzer.js';
@@ -15,6 +15,14 @@ const clear = (getPasscode) =>
         action={room => clearBuzzer(room, getPasscode())}
     >
         {'Clear buzzer'}
+    </ActionButton>;
+
+const next = (getPasscode) =>
+    <ActionButton
+        size="sm"
+        action={room => nextBuzzer(room, getPasscode())}
+    >
+        {'Next buzzer'}
     </ActionButton>;
 
 const clearQuestion = (getPasscode) =>
@@ -59,7 +67,7 @@ const PlayerTable = ({ getPasscode }) => (
                         <th>Player name</th>
                         <th>Team</th>
                         <th>Score</th>
-                        <th>{clear(getPasscode)}</th>
+                        <th>{clear(getPasscode)} {next(getPasscode)}</th>
                         <th>{clearQuestion(getPasscode)}</th>
                     </tr>
                     {Object.keys(players).map(player => (

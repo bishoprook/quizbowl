@@ -6,6 +6,7 @@ export const actionTypes = {
     ADD_PLAYER: 'addPlayer',
     REMOVE_PLAYER: 'removePlayer',
     BUZZ: 'buzz',
+    NEXT_BUZZER: 'nextBuzzer',
     CLEAR_BUZZER: 'clearBuzzer',
     ADD_POINTS: 'addPoints',
     REMOVE_POINTS: 'removePoints',
@@ -16,6 +17,7 @@ export const needsRoomPermission = new Set([
     actionTypes.ADD_QUESTION,
     actionTypes.REMOVE_QUESTION,
     actionTypes.SHOW_QUESTION,
+    actionTypes.NEXT_BUZZER,
     actionTypes.CLEAR_BUZZER,
     actionTypes.ADD_POINTS,
     actionTypes.REMOVE_POINTS,
@@ -53,6 +55,10 @@ export function removePlayer(room, passcode, name) {
 
 export function buzz(room, name) {
     return { type: actionTypes.BUZZ, room, name };
+};
+
+export function nextBuzzer(room, passcode) {
+    return { type: actionTypes.NEXT_BUZZER, room, passcode };
 };
 
 export function clearBuzzer(room, passcode) {
