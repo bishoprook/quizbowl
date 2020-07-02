@@ -8,7 +8,7 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-const Signup = ({ setName }) => {
+const Signup = ({ onSave }) => {
     const nameInput = useRef(null);
     const teamSelect = useRef(null);
     const teamInput = useRef(null);
@@ -46,7 +46,7 @@ const Signup = ({ setName }) => {
                 }
 
                 sendAction(addPlayer(room, name, teamName));
-                setName(name);
+                onSave(name, teamName);
             }
             const onTeamSelectChanged = (evt) => {
                 setShowTeamNameInput(teamSelect.current.selectedOptions[0].id === 'newTeam');
